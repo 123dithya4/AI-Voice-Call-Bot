@@ -6,10 +6,10 @@ It allows users to make AI voice calls using a web-based dashboard.
 ## Screenshots
 
 ### Call Now
-![Call Now](screenshots/call-now.png)
+call-now.png
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+dashboard.png
 
 ## How It Works
 
