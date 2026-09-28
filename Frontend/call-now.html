@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Call - AI Call System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #151009 0%, #241A10 100%);
+            min-height: 100vh;
+            color: #F7EFE5;
+        }
+
+        .navbar {
+            background: rgba(36, 26, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(92, 68, 48, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(92, 68, 48, 0.3);
+            border: 1px solid rgba(92, 68, 48, 0.4);
+            border-radius: 10px;
+            color: #F7EFE5;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 106, 61, 0.2);
+            border-color: #FF6A3D;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #FF6A3D, #FFA36C);
+            border-color: transparent;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #F7EFE5;
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: #C8B29C;
+        }
+
+        .logout-btn {
+            padding: 10px 24px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 10px;
+            color: #fca5a5;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: #C8B29C;
+        }
+
+        .call-form {
+            background: rgba(36, 26, 16, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(92, 68, 48, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #F7EFE5;
+            margin-bottom: 12px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(20, 15, 9, 0.5);
+            border: 2px solid rgba(92, 68, 48, 0.4);
+            border-radius: 12px;
+            color: #F7EFE5;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #9C8570;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #FF6A3D;
+            background: rgba(20, 15, 9, 0.7);
+            box-shadow: 0 0 0 4px rgba(255, 106, 61, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .prompt-templates {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .template-btn {
+            padding: 8px 16px;
+            background: rgba(255, 106, 61, 0.1);
+            border: 1px solid rgba(255, 106, 61, 0.3);
+            border-radius: 8px;
+            color: #FFA36C;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-btn:hover {
+            background: rgba(255, 106, 61, 0.2);
+            border-color: #FF6A3D;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FF6A3D, #FFB020);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(255, 106, 61, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #callStatus {
+            margin-top: 24px;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        #callStatus.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+
+        #callStatus.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .helper-text {
+            font-size: 14px;
+            color: #C8B29C;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .user-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .call-form {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span>📞</span>
+            <span>AI Call System</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="home.html" class="nav-btn">🏠 Home</a>
+            <a href="call-now.html" class="nav-btn active">📞 Call Now</a>
+            <a href="recordings.html" class="nav-btn">📊 Recordings</a>
+        </div>
+
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-name">Loading...</div>
+                <div class="user-email">Loading...</div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title">📞 Make a Call</div>
+            <div class="page-subtitle">Configure and initiate your AI-powered call</div>
+        </div>
+
+        <div class="call-form">
+            <form onsubmit="initiateCall(event)">
+                <div class="form-group">
+                    <label class="form-label">📱 Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="phoneNumber" 
+                        class="form-input" 
+                        placeholder="+1234567890" 
+                        required
+                    >
+                    <div class="helper-text">Include country code (e.g., +1 for US, +91 for India)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">💬 Call Prompt / Script</label>
+                    <textarea 
+                        id="promptText" 
+                        class="form-textarea" 
+                        placeholder="Enter your custom prompt or select a template below..."
+                        required
+                    ></textarea>
+                    <div class="prompt-templates">
+                        <button type="button" class="template-btn" onclick="useTemplate('appointment')">
+                            📅 Appointment Reminder
+                        </button>
+                        <button type="button" class="template-btn" onclick="useTemplate('survey')">
+                            📊 Customer Survey
+                        </button>
+                        <button type="button" class="template-btn" onclick="useTemplate('support')">
+                            🎧 Support Follow-up
+                        </button>
+                        <button type="button" class="template-btn" onclick="useTemplate('custom')">
+                            ✨ Custom
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="initiateBtn">
+                    📞 Initiate Call
+                </button>
+            </form>
+
+            <div id="callStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication check
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return false;
+            }
+            
+            fetch('/api/auth/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Unauthorized');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    updateUserInfo(data.user);
+                } else {
+                    throw new Error('Auth failed');
+                }
+            })
+            .catch(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+            });
+        }
+
+        function updateUserInfo(user) {
+            document.querySelector('.user-name').textContent = user.full_name || user.username;
+            document.querySelector('.user-email').textContent = user.email;
+        }
+
+        function logout() {
+            const token = localStorage.getItem('token');
+            
+            fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).finally(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+            });
+        }
+
+        // Template prompts
+        const templates = {
+            appointment: "Hello! This is a friendly reminder about your appointment scheduled for tomorrow at 3 PM. Please reply to confirm your attendance or let us know if you need to reschedule. Thank you!",
+            survey: "Hi! We recently served you and would love to get your feedback. On a scale of 1 to 10, how would you rate your experience with us? Your feedback helps us improve our service.",
+            support: "Hello! We're following up on your recent support ticket. We wanted to check if your issue has been resolved to your satisfaction. Is there anything else we can help you with?",
+            custom: "You are a helpful AI assistant. Engage in a friendly conversation with the caller."
+        };
+
+        function useTemplate(type) {
+            const textarea = document.getElementById('promptText');
+            textarea.value = templates[type] || '';
+            textarea.focus();
+        }
+
+        async function initiateCall(e) {
+            e.preventDefault();
+            
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const prompt = document.getElementById('promptText').value.trim();
+            const statusDiv = document.getElementById('callStatus');
+            const btn = document.getElementById('initiateBtn');
+            const token = localStorage.getItem('token');
+            
+            if (!phoneNumber || !prompt) {
+                showStatus('Please fill in all fields', 'error');
+                return;
+            }
+
+            if (!phoneNumber.startsWith('+')) {
+                showStatus('Phone number must start with + and country code', 'error');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = '📞 Initiating Call...';
+            
+            try {
+                const response = await fetch('/api/calls/initiate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        phone_number: phoneNumber,
+                        prompt: prompt
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showStatus(`✅ ${data.message} Call ID: ${data.call_id}`, 'success');
+                    
+                    // Clear form
+                    document.getElementById('phoneNumber').value = '';
+                    document.getElementById('promptText').value = '';
+                    
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = '/recordings.html';
+                    }, 2000);
+                } else {
+                    showStatus(`❌ Error: ${data.detail || 'Failed to initiate call'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus(`❌ Network error. Please try again.`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📞 Initiate Call';
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('callStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+            statusDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

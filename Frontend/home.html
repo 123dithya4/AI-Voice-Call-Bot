@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Call System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #151009 0%, #241A10 100%);
+            min-height: 100vh;
+            color: #F7EFE5;
+        }
+
+        .navbar {
+            background: rgba(36, 26, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(92, 68, 48, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(92, 68, 48, 0.3);
+            border: 1px solid rgba(92, 68, 48, 0.4);
+            border-radius: 10px;
+            color: #F7EFE5;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 106, 61, 0.2);
+            border-color: #FF6A3D;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #FF6A3D, #FFA36C);
+            border-color: transparent;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #F7EFE5;
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: #C8B29C;
+        }
+
+        .logout-btn {
+            padding: 10px 24px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 10px;
+            color: #fca5a5;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, rgba(255, 106, 61, 0.1), rgba(255, 163, 108, 0.05));
+            border: 1px solid rgba(255, 106, 61, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #C8B29C;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(36, 26, 16, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(92, 68, 48, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 106, 61, 0.4);
+        }
+
+        .stat-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 12px rgba(255, 106, 61, 0.3));
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #FFA36C;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #C8B29C;
+            font-weight: 500;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .action-card {
+            background: rgba(36, 26, 16, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(92, 68, 48, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(255, 106, 61, 0.3);
+            border-color: rgba(255, 106, 61, 0.5);
+        }
+
+        .action-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 16px rgba(255, 106, 61, 0.4));
+        }
+
+        .action-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #F7EFE5;
+        }
+
+        .action-desc {
+            font-size: 15px;
+            color: #C8B29C;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .user-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .welcome-title {
+                font-size: 32px;
+            }
+
+            .stats-grid,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span>📞</span>
+            <span>AI Call System</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="home.html" class="nav-btn active">🏠 Home</a>
+            <a href="call-now.html" class="nav-btn">📞 Call Now</a>
+            <a href="recordings.html" class="nav-btn">📊 Recordings</a>
+        </div>
+
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-email" id="userEmail">Loading...</div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-title">Welcome to AI Call System 🚀</div>
+            <div class="welcome-subtitle">Manage your AI-powered calls with ease</div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📞</div>
+                <div class="stat-value" id="totalCalls">0</div>
+                <div class="stat-label">Total Calls</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value" id="completedCalls">0</div>
+                <div class="stat-label">Completed Calls</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🎵</div>
+                <div class="stat-value" id="recordedCalls">0</div>
+                <div class="stat-label">Recordings Available</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="avgDuration">0</div>
+                <div class="stat-label">Avg Duration (sec)</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="call-now.html" class="action-card">
+                <div class="action-icon">📞</div>
+                <div class="action-title">Make a Call</div>
+                <div class="action-desc">Initiate a new AI-powered call with custom prompts</div>
+            </a>
+
+            <a href="recordings.html" class="action-card">
+                <div class="action-icon">📊</div>
+                <div class="action-title">View Recordings</div>
+                <div class="action-desc">Access call history, recordings, and transcripts</div>
+            </a>
+
+            <a href="#" class="action-card" onclick="refreshStats(event)">
+                <div class="action-icon">🔄</div>
+                <div class="action-title">Refresh Stats</div>
+                <div class="action-desc">Update dashboard with latest call statistics</div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Authentication check
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.replace('/login.html');
+                return false;
+            }
+            
+            // Verify token
+            fetch('/api/auth/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Unauthorized');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    updateUserInfo(data.user);
+                    loadStats();
+                } else {
+                    throw new Error('Auth failed');
+                }
+            })
+            .catch((error) => {
+                console.error('Auth error:', error);
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.replace('/login.html');
+            });
+        }
+
+        function updateUserInfo(user) {
+            document.getElementById('userName').textContent = user.full_name || user.username;
+            document.getElementById('userEmail').textContent = user.email;
+        }
+
+        function logout() {
+            const token = localStorage.getItem('token');
+            
+            fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).finally(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.replace('/login.html');
+            });
+        }
+
+        async function loadStats() {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch('/api/calls', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch calls');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && data.calls) {
+                    const calls = data.calls;
+                    
+                    // Total calls
+                    document.getElementById('totalCalls').textContent = calls.length;
+                    
+                    // Completed calls
+                    const completed = calls.filter(c => c.status === 'completed').length;
+                    document.getElementById('completedCalls').textContent = completed;
+                    
+                    // Recorded calls
+                    const recorded = calls.filter(c => c.recording_url).length;
+                    document.getElementById('recordedCalls').textContent = recorded;
+                    
+                    // Average duration
+                    const durations = calls.filter(c => c.duration).map(c => c.duration);
+                    const avgDuration = durations.length > 0 
+                        ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
+                        : 0;
+                    document.getElementById('avgDuration').textContent = avgDuration;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                // Set to 0 on error
+                document.getElementById('totalCalls').textContent = '0';
+                document.getElementById('completedCalls').textContent = '0';
+                document.getElementById('recordedCalls').textContent = '0';
+                document.getElementById('avgDuration').textContent = '0';
+            }
+        }
+
+        function refreshStats(e) {
+            e.preventDefault();
+            
+            // Add animation
+            const icon = e.currentTarget.querySelector('.action-icon');
+            icon.style.transform = 'rotate(360deg)';
+            icon.style.transition = 'transform 0.6s ease';
+            
+            setTimeout(() => {
+                icon.style.transform = 'rotate(0deg)';
+            }, 600);
+            
+            loadStats();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

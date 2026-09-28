@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordings - AI Call System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #151009 0%, #241A10 100%);
+            min-height: 100vh;
+            color: #F7EFE5;
+        }
+
+        .navbar {
+            background: rgba(36, 26, 16, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(92, 68, 48, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(92, 68, 48, 0.3);
+            border: 1px solid rgba(92, 68, 48, 0.4);
+            border-radius: 10px;
+            color: #F7EFE5;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 106, 61, 0.2);
+            border-color: #FF6A3D;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #FF6A3D, #FFA36C);
+            border-color: transparent;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #F7EFE5;
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: #C8B29C;
+        }
+
+        .logout-btn {
+            padding: 10px 24px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 10px;
+            color: #fca5a5;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .refresh-btn {
+            padding: 12px 24px;
+            background: rgba(255, 106, 61, 0.2);
+            border: 1px solid rgba(255, 106, 61, 0.4);
+            border-radius: 10px;
+            color: #FFA36C;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255, 106, 61, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .recordings-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .recording-card {
+            background: rgba(36, 26, 16, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(92, 68, 48, 0.3);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .recording-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 106, 61, 0.4);
+        }
+
+        .recording-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .recording-info h3 {
+            font-size: 22px;
+            color: #F7EFE5;
+            margin-bottom: 8px;
+        }
+
+        .recording-meta {
+            font-size: 14px;
+            color: #C8B29C;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-initiated {
+            background: rgba(234, 179, 8, 0.15);
+            color: #fde047;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-in-progress {
+            background: rgba(255, 106, 61, 0.15);
+            color: #FFA36C;
+            border: 1px solid rgba(255, 106, 61, 0.3);
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-failed {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .recording-details {
+            background: rgba(20, 15, 9, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .recording-details p {
+            margin-bottom: 12px;
+            color: #EDE1D3;
+            line-height: 1.6;
+        }
+
+        .recording-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        .recording-details strong {
+            color: #F7EFE5;
+            font-weight: 600;
+        }
+
+        .recording-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6A3D, #FFA36C);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 106, 61, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(92, 68, 48, 0.3);
+            border: 1px solid rgba(92, 68, 48, 0.4);
+            color: #EDE1D3;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(92, 68, 48, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #C8B29C;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #EDE1D3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(36, 26, 16, 0.95);
+            border: 1px solid rgba(92, 68, 48, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #F7EFE5;
+        }
+
+        .modal-close {
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            color: #fca5a5;
+            font-size: 24px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .modal-body {
+            background: rgba(20, 15, 9, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .transcript-message {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: rgba(36, 26, 16, 0.6);
+            border-radius: 10px;
+            border-left: 3px solid #FF6A3D;
+        }
+
+        .transcript-role {
+            font-weight: 600;
+            color: #FFA36C;
+            margin-bottom: 8px;
+            text-transform: capitalize;
+        }
+
+        .transcript-text {
+            color: #EDE1D3;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .user-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .recording-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span>📞</span>
+            <span>AI Call System</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="home.html" class="nav-btn">🏠 Home</a>
+            <a href="call-now.html" class="nav-btn">📞 Call Now</a>
+            <a href="recordings.html" class="nav-btn active">📊 Recordings</a>
+        </div>
+
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-name">Loading...</div>
+                <div class="user-email">Loading...</div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title">📊 Call Recordings</div>
+            <button class="refresh-btn" onclick="loadRecordings()">🔄 Refresh</button>
+        </div>
+
+        <div id="recordingsList" class="recordings-grid">
+            <div class="empty-state">
+                <div class="empty-state-icon">⏳</div>
+                <h3>Loading recordings...</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transcript Modal -->
+    <div id="transcriptModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">📝 Call Transcript</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="transcriptContent" class="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication check
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return false;
+            }
+            
+            fetch('/api/auth/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Unauthorized');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    updateUserInfo(data.user);
+                    loadRecordings();
+                } else {
+                    throw new Error('Auth failed');
+                }
+            })
+            .catch(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+            });
+        }
+
+        function updateUserInfo(user) {
+            document.querySelector('.user-name').textContent = user.full_name || user.username;
+            document.querySelector('.user-email').textContent = user.email;
+        }
+
+        function logout() {
+            const token = localStorage.getItem('token');
+            
+            fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).finally(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+            });
+        }
+
+        async function loadRecordings() {
+            const recordingsList = document.getElementById('recordingsList');
+            const token = localStorage.getItem('token');
+            
+            recordingsList.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⏳</div>
+                    <h3>Loading recordings...</h3>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/calls', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.calls && data.calls.length > 0) {
+                    recordingsList.innerHTML = data.calls.map(call => `
+                        <div class="recording-card">
+                            <div class="recording-header">
+                                <div class="recording-info">
+                                    <h3>${call.phone_number}</h3>
+                                    <div class="recording-meta">
+                                        ${new Date(call.created_at).toLocaleString()}
+                                        ${call.user ? ` • ${call.user}` : ''}
+                                    </div>
+                                </div>
+                                <span class="status-badge status-${call.status}">${call.status}</span>
+                            </div>
+                            
+                            <div class="recording-details">
+                                <p><strong>Prompt:</strong> ${call.prompt || 'N/A'}</p>
+                                ${call.duration ? `<p><strong>Duration:</strong> ${call.duration} seconds</p>` : ''}
+                                ${call.ended_reason ? `<p><strong>End reason:</strong> ${call.ended_reason}</p>` : ''}
+                                ${call.sync_error ? `<p><strong>Status refresh:</strong> ${call.sync_error}</p>` : ''}
+                                ${call.started_at ? `<p><strong>Started:</strong> ${new Date(call.started_at).toLocaleString()}</p>` : ''}
+                                ${call.ended_at ? `<p><strong>Ended:</strong> ${new Date(call.ended_at).toLocaleString()}</p>` : ''}
+                            </div>
+                            
+                            <div class="recording-actions">
+                                <button onclick="viewDetails('${call.id}')" class="action-btn btn-primary">
+                                    📋 Details
+                                </button>
+                                <button onclick="playRecording('${call.id}')" class="action-btn btn-secondary">
+                                    🎵 Recording
+                                </button>
+                                <button onclick="viewTranscript('${call.id}')" class="action-btn btn-secondary">
+                                    📝 Transcript
+                                </button>
+                                <button onclick="deleteCall('${call.id}')" class="action-btn btn-danger">
+                                    🗑️ Delete
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    recordingsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3>No calls found</h3>
+                            <p>Start by initiating your first call!</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading recordings:', error);
+                recordingsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <h3>Error loading recordings</h3>
+                        <p>Please refresh the page</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function viewDetails(callId) {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch(`/api/calls/${callId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || `Request failed (${response.status})`);
+                
+                if (data.success) {
+                    const call = data.call;
+                    alert(
+                        `Call Details\n\n` +
+                        `ID: ${call.id}\n` +
+                        `Phone: ${call.customer?.number || call.phone_number || 'N/A'}\n` +
+                        `Status: ${call.status}\n` +
+                        (call.endedReason ? `End reason: ${call.endedReason}\n` : '') +
+                        `Created: ${new Date(call.createdAt || call.created_at).toLocaleString()}\n` +
+                        (call.endedAt ? `Ended: ${new Date(call.endedAt).toLocaleString()}\n` : '') +
+                        (call.cost ? `Cost: $${call.cost}` : '')
+                    );
+                }
+            } catch (error) {
+                alert(`Error fetching call details: ${error.message}`);
+            }
+        }
+
+        async function playRecording(callId) {
+            const token = localStorage.getItem('token');
+            const btn = event.target;
+            const originalText = btn.textContent;
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ Loading...';
+            
+            try {
+                const response = await fetch(`/api/calls/${callId}/recording`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.recording_url) {
+                    window.open(data.recording_url, '_blank');
+                } else {
+                    alert(data.message || 'Recording not available yet. Please try again in a few moments.');
+                }
+            } catch (error) {
+                alert('Error loading recording');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function viewTranscript(callId) {
+            const token = localStorage.getItem('token');
+            const modal = document.getElementById('transcriptModal');
+            const content = document.getElementById('transcriptContent');
+            
+            content.innerHTML = '<p style="text-align: center; color: #C8B29C;">⏳ Loading transcript...</p>';
+            modal.classList.add('show');
+            
+            try {
+                const response = await fetch(`/api/calls/${callId}/transcript`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.transcript) {
+                    if (Array.isArray(data.transcript)) {
+                        content.innerHTML = data.transcript.map(msg => `
+                            <div class="transcript-message">
+                                <div class="transcript-role">${msg.role}</div>
+                                <div class="transcript-text">${msg.message || msg.content || ''}</div>
+                            </div>
+                        `).join('');
+                    } else {
+                        content.innerHTML = `<pre style="white-space: pre-wrap; color: #EDE1D3;">${JSON.stringify(data.transcript, null, 2)}</pre>`;
+                    }
+                } else {
+                    content.innerHTML = `<p style="text-align: center; color: #C8B29C;">${data.message || 'Transcript not available yet.'}</p>`;
+                }
+            } catch (error) {
+                content.innerHTML = '<p style="text-align: center; color: #fca5a5;">❌ Error loading transcript</p>';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('transcriptModal').classList.remove('show');
+        }
+
+        // Close modal on outside click
+        document.getElementById('transcriptModal').addEventListener('click', (e) => {
+            if (e.target.id === 'transcriptModal') {
+                closeModal();
+            }
+        });
+
+        async function deleteCall(callId) {
+            if (!confirm('Are you sure you want to delete this call?')) {
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch(`/api/calls/${callId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadRecordings();
+                } else {
+                    alert('Error deleting call');
+                }
+            } catch (error) {
+                alert('Error deleting call');
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadRecordings, 30000);
+    </script>
+</body>
+</html>

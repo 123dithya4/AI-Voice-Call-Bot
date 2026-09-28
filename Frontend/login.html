@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Call System - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #171008 0%, #5A2A14 50%, #E8631B 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(36, 26, 16, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 60px;
+            width: 100%;
+            max-width: 580px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 12px rgba(255, 106, 61, 0.4));
+        }
+
+        .logo-title {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFA36C, #FF6A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .logo-subtitle {
+            color: #C8B29C;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        .tab-container {
+            display: flex;
+            background: rgba(20, 15, 9, 0.6);
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 35px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: transparent;
+            color: #C8B29C;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #FF6A3D, #FFA36C);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 106, 61, 0.3);
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            color: #F7EFE5;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(20, 15, 9, 0.5);
+            border: 2px solid rgba(92, 68, 48, 0.4);
+            border-radius: 12px;
+            color: #F7EFE5;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: #9C8570;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #FF6A3D;
+            background: rgba(20, 15, 9, 0.7);
+            box-shadow: 0 0 0 4px rgba(255, 106, 61, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FF6A3D, #FFB020);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 106, 61, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #alertContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+
+        .alert {
+            background: rgba(36, 26, 16, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            color: white;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .alert-success { border-color: #10b981; }
+        .alert-error { border-color: #ef4444; }
+
+        @media (max-width: 640px) {
+            .login-container {
+                padding: 40px 30px;
+            }
+            
+            .logo-title {
+                font-size: 32px;
+            }
+            
+            .logo-icon {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="alertContainer"></div>
+
+    <div class="login-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo-icon">📞</div>
+            <h1 class="logo-title">AI Call System</h1>
+            <p class="logo-subtitle">Welcome! Sign in to continue</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+            <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="signinForm" class="form-container active" onsubmit="handleSignIn(event)">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="signin-username" placeholder="Enter username" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="signin-password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="signinBtn">Sign In</button>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signupForm" class="form-container" onsubmit="handleSignUp(event)">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="signup-username" placeholder="Choose username" required minlength="3">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="signup-email" placeholder="your@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Full Name (Optional)</label>
+                <input type="text" class="form-input" id="signup-name" placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="signup-password" placeholder="Create password (6-72 characters)" required minlength="6" maxlength="72">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-input" id="signup-confirm" placeholder="Confirm password" required minlength="6" maxlength="72">
+            </div>
+
+            <button type="submit" class="submit-btn" id="signupBtn">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+            
+            if (tab === 'signin') {
+                document.getElementById('signinForm').classList.add('active');
+            } else {
+                document.getElementById('signupForm').classList.add('active');
+            }
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        async function handleSignIn(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('signin-username').value.trim();
+            const password = document.getElementById('signin-password').value;
+            const btn = document.getElementById('signinBtn');
+            
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Store token and user data
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    showAlert('✅ Login successful! Redirecting...', 'success');
+                    
+                    // Redirect immediately
+                    setTimeout(() => {
+                        window.location.href = '/home.html';
+                    }, 500);
+                } else {
+                    showAlert('❌ ' + (data.detail || 'Invalid username or password'), 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('❌ Network error. Please check if server is running.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        }
+
+        async function handleSignUp(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('signup-username').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const fullName = document.getElementById('signup-name').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+            const btn = document.getElementById('signupBtn');
+            
+            // Validate password length
+            if (password.length > 72) {
+                showAlert('❌ Password must be less than 72 characters', 'error');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showAlert('❌ Passwords do not match!', 'error');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password,
+                        full_name: fullName || null
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showAlert('✅ Account created successfully! Please sign in.', 'success');
+                    
+                    // Reset form
+                    document.getElementById('signupForm').reset();
+                    
+                    // Switch to sign in tab after delay
+                    setTimeout(() => {
+                        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                        document.querySelector('.tab-btn:first-child').classList.add('active');
+                        
+                        document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+                        document.getElementById('signinForm').classList.add('active');
+                        
+                        // Pre-fill username
+                        document.getElementById('signin-username').value = username;
+                        document.getElementById('signin-password').focus();
+                    }, 1500);
+                } else {
+                    showAlert('❌ ' + (data.detail || 'Registration failed'), 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showAlert('❌ Network error. Please check if server is running.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign Up';
+            }
+        }
+
+        // Check if already logged in
+        (function checkExistingAuth() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.replace('/home.html');
+                    } else {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

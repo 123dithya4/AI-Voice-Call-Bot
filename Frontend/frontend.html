@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Call Tracking - Premium Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6A3D;
+            --primary-dark: #C2410C;
+            --secondary: #FFB020;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark-bg: #151009;
+            --dark-card: #241A10;
+            --dark-hover: #3D2A1A;
+            --border: #3D2A1A;
+            --text: #F7EFE5;
+            --text-light: #C8B29C;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--dark-bg);
+            color: var(--text);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* Apply serif font to all headings */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Login Page */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #151009 0%, #7A2E0F 50%, #B8440A 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 106, 61, 0.3) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            border-radius: 50%;
+        }
+
+        .login-container::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 176, 32, 0.2) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            border-radius: 50%;
+        }
+
+        .login-box {
+            background: rgba(36, 26, 16, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 0.5s ease-in;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 106, 61, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FF6A3D, #FFB020);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: var(--font-serif);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 1.05em;
+            font-family: var(--font-sans);
+            font-weight: 400;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--dark-bg);
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+        }
+
+        .auth-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+            background: var(--dark-bg);
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 106, 61, 0.2);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 25px;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .forgot-password a:hover {
+            color: var(--secondary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 106, 61, 0.4);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--dark-card);
+            box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h2 {
+            background: linear-gradient(135deg, #FF6A3D, #FFB020);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-serif);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+        }
+
+        .nav-item:hover {
+            background: var(--dark-hover);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255, 106, 61, 0.2) 0%, transparent 100%);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.3em;
+        }
+
+        .sidebar-footer {
+            padding: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .user-details h4 {
+            color: var(--text);
+            font-size: 0.95em;
+            font-family: var(--font-sans);
+            font-weight: 600;
+        }
+
+        .user-details p {
+            color: var(--text-light);
+            font-size: 0.85em;
+            font-family: var(--font-sans);
+            font-weight: 400;
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 12px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 30px;
+            background: var(--dark-bg);
+        }
+
+        .page-header {
+            background: var(--dark-card);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .page-header h1 {
+            color: var(--text);
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-family: var(--font-serif);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header p {
+            color: var(--text-light);
+            font-size: 1.05em;
+            font-family: var(--font-sans);
+            font-weight: 400;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--dark-card);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 106, 61, 0.2);
+            border-color: var(--primary);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+        }
+
+        .stat-icon.primary { background: linear-gradient(135deg, #FF6A3D, #C2410C); color: white; }
+        .stat-icon.success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .stat-icon.warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .stat-icon.danger { background: linear-gradient(135deg, #FFB020, #0891b2); color: white; }
+
+        .stat-details h3 {
+            color: var(--text-light);
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+        }
+
+        .stat-details p {
+            color: var(--text);
+            font-size: 2em;
+            font-weight: 700;
+            font-family: var(--font-serif);
+        }
+
+        /* Content Section */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Call Form */
+        .call-form-container {
+            background: var(--dark-card);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            max-width: 800px;
+            border: 1px solid var(--border);
+        }
+
+        .form-group-inline {
+            margin-bottom: 30px;
+        }
+
+        .form-group-inline label {
+            display: block;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+
+        .form-group-inline input,
+        .form-group-inline textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+            background: var(--dark-bg);
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .form-group-inline textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group-inline input:focus,
+        .form-group-inline textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 106, 61, 0.2);
+        }
+
+        .form-group-inline small {
+            display: block;
+            color: var(--text-light);
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        .btn-call {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-call:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-call:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+        }
+
+        /* Recordings Section */
+        .recordings-container {
+            background: var(--dark-card);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .recordings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .recordings-header h2 {
+            color: var(--text);
+            font-size: 1.6em;
+            font-family: var(--font-serif);
+            font-weight: 700;
+        }
+
+        .btn-refresh {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 106, 61, 0.3);
+        }
+
+        /* Call Cards */
+        .call-card {
+            background: var(--dark-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .call-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(255, 106, 61, 0.2);
+            border-left-color: var(--secondary);
+        }
+
+        .call-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .call-id {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1em;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-completed { background: var(--success); color: white; }
+        .status-in-progress { background: var(--warning); color: white; }
+        .status-initiated { background: var(--primary); color: white; }
+        .status-ended { background: var(--secondary); color: white; }
+
+        .call-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+
+        .detail-item strong {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .prompt-box {
+            background: var(--dark-card);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .prompt-box strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .call-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-info {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Audio Player */
+        .audio-player {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--dark-card);
+            border-radius: 10px;
+            border: 2px solid var(--border);
+        }
+
+        .audio-player strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Transcript */
+        .transcript {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--dark-card);
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transcript strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .message-assistant {
+            background: rgba(255, 106, 61, 0.2);
+            border-left: 3px solid var(--primary);
+        }
+
+        .message-user {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 3px solid var(--success);
+        }
+
+        .message strong {
+            color: var(--primary);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: var(--text);
+            margin-bottom: 10px;
+            font-size: 1.6em;
+            font-family: var(--font-serif);
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            font-family: var(--font-sans);
+            font-weight: 400;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid var(--success);
+            color: var(--success);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 4px solid var(--danger);
+            color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-header h2 span {
+                display: none;
+            }
+
+            .nav-item span {
+                display: none;
+            }
+
+            .user-details,
+            .btn-logout span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>📞 AI Voice Bot</h1>
+                <p>Welcome back! Please sign in to continue</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="signin">Sign In</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <form id="signinForm" class="auth-form active">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="signinEmail" placeholder="admin@aicalls.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signinPassword" placeholder="Enter your password" required>
+                </div>
+                <div class="forgot-password">
+                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="signupForm" class="auth-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+
+            <!-- Forgot Password Form -->
+            <form id="forgotPasswordForm" class="auth-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="forgotEmail" placeholder="Enter your email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Reset Password</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" id="backToSignin" style="color: var(--primary); text-decoration: none;">← Back to Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>📞 <span>AI Calls</span></h2>
+            </div>
+            
+            <div class="sidebar-nav">
+                <div class="nav-item active" data-page="home">
+                    <span class="nav-icon">🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" data-page="call-now">
+                    <span class="nav-icon">📱</span>
+                    <span>Call Now</span>
+                </div>
+                <div class="nav-item" data-page="recordings">
+                    <span class="nav-icon">🎧</span>
+                    <span>Recordings</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-details">
+                        <h4 id="userName">Admin User</h4>
+                        <p id="userEmail">admin@aicalls.com</p>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <span>🚪 Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Home Page -->
+            <div class="content-section active" id="home">
+                <div class="page-header">
+                    <h1>Welcome to AI Call Dashboard</h1>
+                    <p>Monitor and manage your AI-powered phone calls</p>
+                </div>
+
+                <div id="alertContainer"></div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">📞</div>
+                        <div class="stat-details">
+                            <h3>Total Calls</h3>
+                            <p id="totalCalls">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">✅</div>
+                        <div class="stat-details">
+                            <h3>Completed</h3>
+                            <p id="completedCalls">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">⏳</div>
+                        <div class="stat-details">
+                            <h3>In Progress</h3>
+                            <p id="inProgressCalls">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon danger">⏱️</div>
+                        <div class="stat-details">
+                            <h3>Total Duration</h3>
+                            <p id="totalDuration">0m</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recordings-container">
+                    <div class="recordings-header">
+                        <h2>Recent Calls</h2>
+                        <button class="btn-refresh" onclick="loadCalls()">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                    <div id="recentCalls"></div>
+                </div>
+            </div>
+
+            <!-- Call Now Page -->
+            <div class="content-section" id="call-now">
+                <div class="page-header">
+                    <h1>Make a New Call</h1>
+                    <p>Enter phone number and instructions to start an AI call</p>
+                </div>
+
+                <div class="call-form-container">
+                    <form id="callForm">
+                        <div class="form-group-inline">
+                            <label>📱 Phone Number</label>
+                            <input type="tel" id="phoneNumber" placeholder="+1234567890" required>
+                            <small>Include country code (e.g., +1 for US, +91 for India)</small>
+                        </div>
+
+                        <div class="form-group-inline">
+                            <label>💬 Call Instructions / Prompt</label>
+                            <textarea id="prompt" placeholder="Example: You are a friendly AI assistant calling to schedule an appointment. Ask the customer when they would be available for a consultation this week." required></textarea>
+                            <small>Enter what the AI should say and do during the call</small>
+                        </div>
+
+                        <button type="submit" class="btn-call" id="startCallBtn">
+                            📞 Start Call
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recordings Page -->
+            <div class="content-section" id="recordings">
+                <div class="page-header">
+                    <h1>Call Recordings</h1>
+                    <p>Listen to recordings and view transcripts</p>
+                </div>
+
+                <div class="recordings-container">
+                    <div class="recordings-header">
+                        <h2>All Recordings</h2>
+                        <button class="btn-refresh" onclick="loadCalls()">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                    <div id="recordingsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentUser = null;
+        let authToken = localStorage.getItem('authToken');
+
+        function authHeaders(extra = {}) {
+            return { ...extra, ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}) };
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/[&<>"']/g, char => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[char]);
+        }
+
+        if (authToken) {
+            fetch(`${API_BASE}/api/auth/me`, { headers: authHeaders() })
+                .then(response => response.ok ? response.json() : Promise.reject())
+                .then(data => { if (data.success) { currentUser = data.user; showDashboard(data.user); } })
+                .catch(() => { authToken = null; localStorage.removeItem('authToken'); });
+        }
+
+        // Auth Tab Switching
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+                
+                if (tabName === 'signin') {
+                    document.getElementById('signinForm').classList.add('active');
+                } else if (tabName === 'signup') {
+                    document.getElementById('signupForm').classList.add('active');
+                }
+            });
+        });
+
+        // Forgot Password Link
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.getElementById('forgotPasswordForm').classList.add('active');
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        });
+
+        // Back to Sign In
+        document.getElementById('backToSignin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.getElementById('signinForm').classList.add('active');
+            document.querySelector('.auth-tab[data-tab="signin"]').classList.add('active');
+        });
+
+        // Sign In Form Handler
+        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('signinEmail').value.trim();
+            const password = document.getElementById('signinPassword').value;
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Sign in failed');
+                authToken = data.token;
+                localStorage.setItem('authToken', authToken);
+                currentUser = data.user;
+                showDashboard(data.user);
+            } catch (error) { alert(error.message); }
+        });
+
+        // Sign Up Form Handler
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const full_name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            if (password !== confirmPassword) { alert('Passwords do not match'); return; }
+            const username = (email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_').length >= 3
+                ? email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_')
+                : email.replace(/[^a-zA-Z0-9_]/g, '_')).slice(0, 50);
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/register`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, full_name })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Sign up failed');
+                alert('Account created. Please sign in with your email address.');
+                document.getElementById('signupForm').reset();
+                document.querySelector('.auth-tab[data-tab="signin"]').click();
+                document.getElementById('signinEmail').value = email;
+            } catch (error) { alert(error.message); }
+        });
+
+        function showDashboard(user) {
+            const name = user.full_name || user.username;
+            document.getElementById('userName').textContent = name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            loadCalls();
+            updateStats();
+        }
+
+        // Password reset is not configured by the backend yet.
+        document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Password reset is not available yet. Contact the administrator.');
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                if (authToken) fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', headers: authHeaders() });
+                authToken = null;
+                localStorage.removeItem('authToken');
+                currentUser = null;
+                document.getElementById('dashboard').classList.remove('active');
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('signinEmail').value = '';
+                document.getElementById('signinPassword').value = '';
+                
+                // Reset forms
+                document.querySelectorAll('.auth-form').forEach(form => {
+                    form.classList.remove('active');
+                    form.reset();
+                });
+                document.getElementById('signinForm').classList.add('active');
+                document.querySelector('.auth-tab[data-tab="signin"]').classList.add('active');
+            }
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+
+                const page = this.getAttribute('data-page');
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(page).classList.add('active');
+
+                if (page === 'recordings' || page === 'home') {
+                    loadCalls();
+                }
+            });
+        });
+
+        // Call Form Handler
+        document.getElementById('callForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await initiateCall();
+        });
+
+        async function initiateCall() {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const prompt = document.getElementById('prompt').value.trim();
+            const button = document.getElementById('startCallBtn');
+
+            if (!phoneNumber || !prompt) {
+                showAlert('Please fill in all fields', 'error');
+                return;
+            }
+
+            button.disabled = true;
+            button.innerHTML = '⏳ Initiating Call...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/calls/initiate`, {
+                    method: 'POST',
+                    headers: authHeaders({ 'Content-Type': 'application/json', 'Accept': 'application/json' }),
+                    body: JSON.stringify({
+                        phone_number: phoneNumber,
+                        prompt: prompt
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showAlert('✅ Vapi accepted the call request. Check the call status below to confirm whether it connected.', 'success');
+                    document.getElementById('phoneNumber').value = '';
+                    document.getElementById('prompt').value = '';
+                    
+                    // Show a reminder about voice settings
+                    setTimeout(() => {
+                        showAlert('ℹ️ Note: If you can\'t hear the AI voice during the call, check your phone volume and ensure voice settings are properly configured in Vapi dashboard.', 'success');
+                    }, 3000);
+                    
+                    loadCalls();
+                    updateStats();
+                } else {
+                    showAlert('❌ Error: ' + (data.detail || data.message || 'Failed to initiate call'), 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error connecting to server: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '📞 Start Call';
+            }
+        }
+
+        async function loadCalls() {
+            const recentCallsDiv = document.getElementById('recentCalls');
+            const recordingsDiv = document.getElementById('recordingsList');
+            
+            const loadingHTML = '<div class="loading"><div class="spinner"></div><p>Loading calls...</p></div>';
+            if (recentCallsDiv) recentCallsDiv.innerHTML = loadingHTML;
+            if (recordingsDiv) recordingsDiv.innerHTML = loadingHTML;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/calls`, { headers: authHeaders() });
+                const data = await response.json();
+                if (response.status === 401) { logout(); throw new Error('Please sign in again'); }
+
+                if (data.success && data.calls && data.calls.length > 0) {
+                    data.calls.sort((a, b) => {
+                        const dateA = new Date(a.createdAt || a.created_at || 0);
+                        const dateB = new Date(b.createdAt || b.created_at || 0);
+                        return dateB - dateA;
+                    });
+
+                    // Store current state of expanded recordings/transcripts
+                    const expandedRecordings = {};
+                    const expandedTranscripts = {};
+                    
+                    data.calls.forEach(call => {
+                        const recDiv = document.getElementById(`recording-${call.id}`);
+                        const transDiv = document.getElementById(`transcript-${call.id}`);
+                        if (recDiv && recDiv.style.display === 'block') {
+                            expandedRecordings[call.id] = recDiv.innerHTML;
+                        }
+                        if (transDiv && transDiv.style.display === 'block') {
+                            expandedTranscripts[call.id] = transDiv.innerHTML;
+                        }
+                    });
+
+                    const callsHTML = data.calls.map(call => createCallCard(call)).join('');
+                    const recentHTML = data.calls.slice(0, 5).map(call => createCallCard(call)).join('');
+                    
+                    if (recentCallsDiv) recentCallsDiv.innerHTML = recentHTML;
+                    if (recordingsDiv) recordingsDiv.innerHTML = callsHTML;
+                    
+                    // Restore expanded states
+                    Object.keys(expandedRecordings).forEach(callId => {
+                        const recDiv = document.getElementById(`recording-${callId}`);
+                        if (recDiv) {
+                            recDiv.innerHTML = expandedRecordings[callId];
+                            recDiv.style.display = 'block';
+                        }
+                    });
+                    
+                    Object.keys(expandedTranscripts).forEach(callId => {
+                        const transDiv = document.getElementById(`transcript-${callId}`);
+                        if (transDiv) {
+                            transDiv.innerHTML = expandedTranscripts[callId];
+                            transDiv.style.display = 'block';
+                        }
+                    });
+                } else {
+                    const emptyHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3>No calls yet</h3>
+                            <p>Start your first call from the "Call Now" section</p>
+                        </div>
+                    `;
+                    if (recentCallsDiv) recentCallsDiv.innerHTML = emptyHTML;
+                    if (recordingsDiv) recordingsDiv.innerHTML = emptyHTML;
+                }
+                
+                updateStats();
+            } catch (error) {
+                const errorHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Connection Error</h3>
+                        <p>Make sure the backend server is running</p>
+                        <p><small>${escapeHTML(error.message)}</small></p>
+                    </div>
+                `;
+                if (recentCallsDiv) recentCallsDiv.innerHTML = errorHTML;
+                if (recordingsDiv) recordingsDiv.innerHTML = errorHTML;
+            }
+        }
+
+        function createCallCard(call) {
+            const callId = String(call.id ?? '');
+            const safeId = escapeHTML(callId);
+            const status = String(call.status || 'unknown');
+            const statusClass = `status-${escapeHTML(status)}`;
+            
+            const createdAt = call.createdAt || call.created_at || new Date().toISOString();
+            const formattedDate = new Date(createdAt).toLocaleString();
+            
+            const customerNumber = call.customer?.number || call.phone_number || 'N/A';
+            const duration = call.duration ? `${Math.round(call.duration)}s` : 'N/A';
+            const prompt = call.prompt || 'No prompt recorded';
+            
+            return `
+                <div class="call-card" id="call-${safeId}">
+                    <div class="call-card-header">
+                        <div class="call-id">Call ID: ${escapeHTML(callId.substring(0, 8))}...</div>
+                        <span class="status-badge ${statusClass}">${escapeHTML(status.toUpperCase())}</span>
+                    </div>
+                    <div class="call-details">
+                        <div class="detail-item">
+                            <strong>📱 Phone:</strong> ${escapeHTML(customerNumber)}
+                        </div>
+                        <div class="detail-item">
+                            <strong>📅 Date:</strong> ${escapeHTML(formattedDate)}
+                        </div>
+                        <div class="detail-item">
+                            <strong>⏱️ Duration:</strong> ${escapeHTML(duration)}
+                        </div>
+                        ${call.ended_reason || call.endedReason ? `<div class="detail-item"><strong>End reason:</strong> ${escapeHTML(call.ended_reason || call.endedReason)}</div>` : ''}
+                    ${call.sync_error ? `<div class="detail-item"><strong>Status refresh:</strong> ${escapeHTML(call.sync_error)}</div>` : ''}
+                    </div>
+                    <div class="prompt-box">
+                        <strong>💬 Prompt:</strong>
+                        <p>${escapeHTML(prompt)}</p>
+                    </div>
+                    <div class="call-actions">
+                        <button type="button" class="btn-small btn-info" data-call-action="recording" data-call-id="${safeId}">
+                            🎧 Recording
+                        </button>
+                        <button type="button" class="btn-small btn-info" data-call-action="transcript" data-call-id="${safeId}">
+                            📝 Transcript
+                        </button>
+                        <button type="button" class="btn-small btn-danger" data-call-action="delete" data-call-id="${safeId}">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                    <div id="recording-${safeId}" style="display: none;"></div>
+                    <div id="transcript-${safeId}" style="display: none;"></div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('click', function(e) {
+            const button = e.target.closest('[data-call-action]');
+            if (!button) return;
+            const callId = button.dataset.callId;
+            if (button.dataset.callAction === 'recording') viewRecording(callId);
+            if (button.dataset.callAction === 'transcript') viewTranscript(callId);
+            if (button.dataset.callAction === 'delete') deleteCall(callId);
+        });
+
+        async function viewRecording(callId) {
+            const recordingDiv = document.getElementById(`recording-${callId}`);
+            
+            // If recording is already shown, hide it (toggle behavior)
+            if (recordingDiv.innerHTML.includes('audio-player') && recordingDiv.style.display !== 'none') {
+                recordingDiv.style.display = 'none';
+                return;
+            }
+            
+            // Show the div and load recording
+            recordingDiv.style.display = 'block';
+            recordingDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading recording...</p></div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/calls/${callId}`, { headers: authHeaders() });
+                const data = await response.json();
+                
+                const recordingUrl = data.call?.recordingUrl || data.call?.artifact?.recordingUrl || data.call?.recording_url;
+                const parsedRecordingUrl = recordingUrl ? new URL(recordingUrl, window.location.href) : null;
+                if (data.success && parsedRecordingUrl?.protocol === 'https:') {
+                    recordingDiv.innerHTML = `
+                        <div class="audio-player">
+                            <strong>🎧 Call Recording:</strong>
+                            <audio controls preload="metadata">
+                                <source src="${escapeHTML(parsedRecordingUrl.href)}" type="audio/mpeg">
+                                <source src="${escapeHTML(parsedRecordingUrl.href)}" type="audio/wav">
+                                <source src="${escapeHTML(parsedRecordingUrl.href)}" type="audio/ogg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            <div style="margin-top: 10px;">
+                                <a href="${escapeHTML(parsedRecordingUrl.href)}" download style="color: var(--primary); text-decoration: none; font-size: 0.9em;">
+                                    📥 Download Recording
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    recordingDiv.innerHTML = `
+                        <div class="audio-player">
+                            <strong>⚠️</strong> ${escapeHTML(data.message || 'Recording not available yet. Please wait a few moments after the call ends and refresh.')}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                recordingDiv.innerHTML = `
+                    <div class="audio-player">
+                        <strong>❌ Error:</strong> Failed to load recording. ${escapeHTML(error.message)}
+                    </div>
+                `;
+            }
+        }
+
+        async function viewTranscript(callId) {
+            const transcriptDiv = document.getElementById(`transcript-${callId}`);
+            
+            // If transcript is already shown, hide it (toggle behavior)
+            if (transcriptDiv.innerHTML.includes('transcript') && transcriptDiv.style.display !== 'none') {
+                transcriptDiv.style.display = 'none';
+                return;
+            }
+            
+            // Show the div and load transcript
+            transcriptDiv.style.display = 'block';
+            transcriptDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading transcript...</p></div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/calls/${callId}`, { headers: authHeaders() });
+                const data = await response.json();
+                
+                const transcript = data.call?.artifact?.transcript || data.call?.transcript;
+                if (data.success && transcript) {
+                    let transcriptHTML = '<div class="transcript"><strong>📝 Call Transcript:</strong>';
+                    
+                    if (Array.isArray(transcript)) {
+                        if (transcript.length === 0) {
+                            transcriptHTML += '<p style="color: var(--text-light); margin-top: 10px;">No transcript available yet. Please wait for the call to complete.</p>';
+                        } else {
+                            transcript.forEach(msg => {
+                                const role = msg.role || 'unknown';
+                                const content = msg.content || msg.message || '';
+                                const messageClass = role === 'assistant' ? 'message-assistant' : 'message-user';
+                                transcriptHTML += `
+                                    <div class="message ${messageClass}">
+                                        <strong>${escapeHTML(role.toUpperCase())}:</strong>
+                                        <p>${escapeHTML(content)}</p>
+                                    </div>
+                                `;
+                            });
+                        }
+                    } else if (typeof transcript === 'string') {
+                        transcriptHTML += `<p style="margin-top: 10px;">${escapeHTML(transcript)}</p>`;
+                    } else {
+                        transcriptHTML += '<p style="color: var(--text-light); margin-top: 10px;">Transcript format not recognized.</p>';
+                    }
+                    
+                    transcriptHTML += '</div>';
+                    transcriptDiv.innerHTML = transcriptHTML;
+                } else {
+                    transcriptDiv.innerHTML = `
+                        <div class="transcript">
+                            <strong>⚠️ Transcript not available yet.</strong>
+                            <p>Transcripts are generated after the call ends. Please wait a few moments and try again.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                transcriptDiv.innerHTML = `
+                    <div class="transcript">
+                        <strong>❌ Error:</strong> Failed to load transcript. ${escapeHTML(error.message)}
+                    </div>
+                `;
+            }
+        }
+
+        async function deleteCall(callId) {
+            if (!confirm('Are you sure you want to delete this call record?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/calls/${callId}`, {
+                    method: 'DELETE', headers: authHeaders()
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('✅ Call deleted successfully', 'success');
+                    loadCalls();
+                    updateStats();
+                } else {
+                    showAlert('❌ Failed to delete call', 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        async function updateStats() {
+            try {
+                const response = await fetch(`${API_BASE}/api/calls`, { headers: authHeaders() });
+                const data = await response.json();
+                
+                if (data.success && data.calls) {
+                    const calls = data.calls;
+                    const total = calls.length;
+                    const completed = calls.filter(c => c.status === 'completed' || c.status === 'ended').length;
+                    const inProgress = calls.filter(c => c.status === 'in-progress').length;
+                    
+                    let totalDuration = 0;
+                    calls.forEach(c => {
+                        if (c.duration) totalDuration += c.duration;
+                    });
+                    const durationMinutes = Math.round(totalDuration / 60);
+                    
+                    document.getElementById('totalCalls').textContent = total;
+                    document.getElementById('completedCalls').textContent = completed;
+                    document.getElementById('inProgressCalls').textContent = inProgress;
+                    document.getElementById('totalDuration').textContent = `${durationMinutes}m`;
+                }
+            } catch (error) {
+                console.error('Stats update error:', error);
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            const icon = type === 'success' ? '✅' : '❌';
+            
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <span>${icon}</span>
+                    <span>${escapeHTML(message)}</span>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Auto-refresh calls every 30 seconds
+        setInterval(() => {
+            if (currentUser) {
+                loadCalls();
+                updateStats();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
